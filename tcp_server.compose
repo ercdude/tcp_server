@@ -1,0 +1,17 @@
+version: '2.2'
+
+services:
+  tcp_server_build:
+    image: tcp_server:build
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile
+    volumes:
+      - .:/src
+    command: ["tail", "-f", "/dev/null"]
+    networks:
+      - rec_network
+    restart: unless-stopped
+
+networks:
+  rec_network:

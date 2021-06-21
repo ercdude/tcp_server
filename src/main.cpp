@@ -29,30 +29,40 @@
 
 #include "server.h"
 
+/**
+ * Handles a TcpConnection \c conn.
+ *
+ * It waits until something is read from \c conn, prints the message received and
+ * sends a Hello text.
+ */
 void handle_connection(TcpConnection* conn)
 {
         std::string msg = TcpServer::read_string(conn);
+
+        printf("Message received from client: %s\n", msg.c_str());
+
         TcpServer::write_string(conn, "Hello from server");
 }
 
 int main(int argc, char *argv[])
 {
+        // TODO: adds argv handling and use a config file for reading these attributes.
         std::string address = "127.0.0.1";
         uint16_t port = 666;
-        printf("Starting server...\n");
+        printf("Starting to serve...\n");
 
         try
         {
                 TcpServer server(address, port);
-                printf("Server created...\n");
                 server.add_handler(&handle_connection);
-                printf("Handler added...\n");
                 server.listen();
-                printf("done...\n");
-        } catch( std::exception& e ) {
+        }
+        catch( std::exception& e )
+        {
                 printf("Error: %s", e.what());
                 return 1;
         }
 
+        printf("Done serving...\n");
         return 0;
 }

@@ -32,6 +32,10 @@
 
 using namespace boost::asio;
 
+/**
+ * The \c TcpConnection struct holds the connection data, which consists in
+ * a socket and its handler.
+ */
 typedef struct TcpConnection
 {
     // The socket of each connection
@@ -45,11 +49,19 @@ typedef struct TcpConnection
         {}
 } TcpConnection;
 
+/**
+ * The \c TcpServerImpl holds all the internal data about the connection.
+ */
 typedef struct TcpServerImpl
 {
+    /** The control object of the boost connection.
+     * It's needed for most classes, such as the acceptor. */
     io_service service;
-    // The endpoint listener
+
+    /** The acceptor indicates whenever a connection reaches the given TCP/IP address. */
     ip::tcp::acceptor acceptor;
+
+    /** The connection is the IO responsible, holding the socket and it's handler.  */
     TcpConnection* connection = nullptr;
 
     TcpServerImpl(const std::string& address, uint16_t port)

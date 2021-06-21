@@ -81,7 +81,12 @@ TcpServer::TcpServer(const std::string& address, uint16_t port)
 
 TcpServer::~TcpServer()
 {
-    delete _impl;
+    // TODO: use smartpointers
+    if(_impl)
+    {
+        if(_impl->connection) delete _impl->connection;
+        delete _impl;
+    }
 }
 
 void TcpServer::handle_accept(TcpConnection* connection)
